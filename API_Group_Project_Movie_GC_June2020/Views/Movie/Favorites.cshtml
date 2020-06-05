@@ -1,7 +1,60 @@
-﻿
+﻿@model List<MovieDetail>
 @{
     ViewData["Title"] = "Favorites";
 }
 
 <h1>Favorites</h1>
 
+@*//display a list of favorites*@
+@*add a remove button*@
+
+
+@*public int id { get; set; }
+        public string title { get; set; }
+        public int runtime { get; set; }
+        public DateTime release_date { get; set; }
+        public string poster_path { get; set; }
+        public string overview { get; set; }
+        public string tagline { get; set; }*@
+
+
+<table class="table table-bordered">
+    <tr>
+        <th>title</th>
+        <th>runtime</th>
+        <th>release_date</th>
+        <th>poster_path</th>
+        <th>overview</th>
+        <th>tagline</th>
+    </tr>
+    @foreach (MovieDetail favoriteFilm in Model)
+    {
+        <tr>
+            <td>@favoriteFilm.title</td>
+            <td>@favoriteFilm.runtime</td>
+            <td>@favoriteFilm.poster_path</td>
+            <td>@favoriteFilm.release_date</td>
+            <td>@favoriteFilm.overview</td>
+            <td>@favoriteFilm.tagline</td>
+           <td><button onclick="document.location = '/Movie/RemoveFilm?id=@favoriteFilm.id'"> Edit this task</button></td> 
+        </tr>
+    }
+</table>
+
+@*@using (Html.BeginForm("Delete", "Movie", FormMethod.Post))
+    {
+        <input type="submit" class="button" value="Delete" />
+    }*@
+
+
+
+
+@*Id (primary key) - int, not null, auto increment
+    Original_title(Name) - Nvarchar(50)
+    Genre - varchar (20)
+    Runtime - int
+    Release date - date
+    Poster (link to photo) -  varchar(40)
+    Summary / overview - nvarchar(400)
+    Tagline - nvarchar(100)
+    UserId(ASP.net users)- foreign key*@
