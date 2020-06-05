@@ -3,5 +3,16 @@
     ViewData["Title"] = "SearchIndex";
 }
 
-<h1>SearchIndex</h1>
+<h1>Welcome to our Movie Database!</h1>
+<br>
+<br>
 
+<h2>Enter a title of a movie that you would like to search for!</h2>
+
+<form asp-controller="Movie" asp-action="SearchResult" method="post">
+
+<p>
+    Movie Search: <input type="text" name="searchTitle">
+    <input type="submit" value="Search" />
+</p>
+</form>
