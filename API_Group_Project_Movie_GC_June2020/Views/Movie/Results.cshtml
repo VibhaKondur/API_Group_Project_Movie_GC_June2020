@@ -2,6 +2,32 @@
 @{
     ViewData["Title"] = "Results";
 }
+@model List<Movie>
 
-<h1>Results</h1>
+<h1>Movie Results </h1>
 
+<<table style="width:100%">
+
+    <tr>
+        <th>Movie Title</th>
+        <th>Movie Run Time</th>
+        <th>Movie Release Date</th>
+        <th>Movie Poster</th>
+    </tr>
+
+    @foreach (var movie in Model)
+    {
+        <tr>
+            <td>@movie.title</td>
+            <td>@movie.runtime</td>
+            <td>@movie.release_date.ToShortDateString()</td>
+            <td><img src="@movie.poster_path" /></td>
+            <td>
+                <button onclick="document.location = '/Movie/AddToFavorite?title=@movie.title'"> Add to Favorites</button>
+            </td>
+            
+        </tr>
+     }
+
+
+</table>
