@@ -24,16 +24,19 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             return View();
         }
 
-        
-        public async Task<IActionResult> SearchResult(string searchTitle)
-        { 
-            List<Movie> ml =  await _movieDAL.GetMovieListByTitleSearch(searchTitle);
-            return RedirectToAction("Results", ml);
-        }
+
+        //public IActionResult SearchResult(string searchTitle)
+        //{
+        //    List<Movie> ml = new List<Movie>();
+        //    ml = _movieDAL.GetMovieListByTitleSearch(searchTitle);
+        //    return RedirectToAction("Results", ml);
+        //}
 
         [HttpPost]
-        public IActionResult Results(List<Movie> ml)
+        public IActionResult Results(string searchTitle)
         {
+            List<MovieDetail> ml = new List<MovieDetail>();
+            ml = _movieDAL.GetMovieListByTitleSearch(searchTitle);
             return View(ml);
         }
 
