@@ -21,8 +21,6 @@ namespace API_Group_Project_Movie_GC_June2020.Models
 
         public string GetBaseUrl()
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("https://api.themoviedb.org/");
             return "https://api.themoviedb.org/";
         }
 
@@ -36,6 +34,14 @@ namespace API_Group_Project_Movie_GC_June2020.Models
             JObject json = JObject.Parse(output);
             List<JToken> modelData = json["results"].ToList();
             MovieDetail movieObject = JsonConvert.DeserializeObject<MovieDetail>(modelData[i].ToString());
+            url = GetBaseUrl() + $"3/movie/{movieObject.id}?api_key={_APIKey}";
+            request = WebRequest.CreateHttp(url);
+            response = (HttpWebResponse)request.GetResponse();
+            rd = new StreamReader(response.GetResponseStream());
+            output = rd.ReadToEnd();
+            json = JObject.Parse(output);
+            JToken runtimeFromJson = json["runtime"];
+            movieObject.runtime = JsonConvert.DeserializeObject<int>(runtimeFromJson.ToString());
             return movieObject;
         }
 
