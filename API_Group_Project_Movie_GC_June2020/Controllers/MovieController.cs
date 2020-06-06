@@ -19,9 +19,23 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             _APIKey = configuration.GetSection("APIKey")["MovieAPI"];
             _movieDAL = new MovieDAL(_APIKey);
         }
-        public IActionResult Index()
+        public IActionResult SearchIndex()
         {
             return View();
         }
+
+        
+        public async Task<IActionResult> SearchResult(string searchTitle)
+        { 
+            List<Movie> ml =  await _movieDAL.GetMovieListByTitleSearch(searchTitle);
+            return RedirectToAction("Results", ml);
+        }
+
+        [HttpPost]
+        public IActionResult Results(List<Movie> ml)
+        {
+            return View(ml);
+        }
+
     }
 }
