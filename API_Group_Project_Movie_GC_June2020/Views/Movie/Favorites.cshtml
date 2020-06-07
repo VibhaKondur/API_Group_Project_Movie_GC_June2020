@@ -16,7 +16,7 @@
         <img src="@imgsrc" style="width:50%" /><br>
         <h4>@favoriteFilm.title</h4>
         <h5>Run Time: @favoriteFilm.runtime</h5>
-        <h5>Release Date: @favoriteFilm.release_date.ToShortDateString()</h5>
+        <h5>Release Date: @favoriteFilm.release_date</h5>
         <h5>Overview: @favoriteFilm.overview</h5>
         <h5>Tag Line: @favoriteFilm.tagline</h5>
         <button onclick="document.location = '/Movie/RemoveFilm?id=@favoriteFilm.id'"> Remove this movie</button>

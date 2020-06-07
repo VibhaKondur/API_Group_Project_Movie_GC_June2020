@@ -26,7 +26,7 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             _context = context;
         }
 
-        
+
         public IActionResult SearchIndex()
         {
             return View();
@@ -51,9 +51,13 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             return RedirectToAction("Favorites");/*, new { id = favorite.Id});*/
         }
 
-        public IActionResult Favorites()
+        public async Task<IActionResult> Favorites()
         {
-            return View();
+            List<MovieDetail> ml = new List<MovieDetail>();
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var favoritesOfUser = _context.Favorites.Where(x => x.UserId == id).ToList();
+            ml = await _movieDAL.GetFavoriteMoviesList(favoritesOfUser);
+            return View(ml);
         }
 
         public IActionResult DeleteFromFavorites(int id)
@@ -68,7 +72,7 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
         }
 
 
-        
+
 
 
         //public IActionResult SearchResult(string searchTitle)
@@ -81,8 +85,7 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
         [HttpPost]
         public async Task<IActionResult> Results(string searchTitle)
         {
-            List<MovieDetail> ml = new List<MovieDetail>();
-            ml = await _movieDAL.GetMovieListByTitleSearch(searchTitle);
+            List<MovieDetail> ml = await _movieDAL.GetMovieListByTitleSearch(searchTitle);
             return View(ml);
         }
 

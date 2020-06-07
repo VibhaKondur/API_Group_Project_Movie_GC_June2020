@@ -20,17 +20,26 @@
         <tr>
             <td>@movie.title</td>
             <td>@movie.runtime</td>
-            <td>@movie.release_date.ToShortDateString()</td>
-            @{ 
+            <td>@movie.release_date</td>
+            @{
                 string imgsrc = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
             }
-            <td><img src="@imgsrc" style="width:50%" /></td>
+            <td>
+                @if (movie.poster_path != null)
+                {
+                    <img src="@imgsrc" style="width:50%" />
+                }
+                else
+                {
+                    <p class="text-danger">no poster!</p>
+                }
+            </td>
             <td>
                 <button onclick="document.location = '/MovieTest/AddToFavorite?id=@movie.id'"> Add to Favorites</button>
             </td>
-            
+
         </tr>
-     }
+    }
 
 
 </table>

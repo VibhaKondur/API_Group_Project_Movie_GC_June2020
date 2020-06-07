@@ -32,21 +32,47 @@ namespace API_Group_Project_Movie_GC_June2020.Models
             var response = await client.GetAsync($"/3/search/movie?api_key={_APIKey}&query={searchTitle}");
             var movieJson = await response.Content.ReadAsStringAsync();
             JObject json = JObject.Parse(movieJson);
-            List<MovieDetail> movieObject = JsonConvert.DeserializeObject<List<MovieDetail>>(json["results"].ToString());
+            JToken modelData = json["results"];
+            List<MovieDetail> movieObject = JsonConvert.DeserializeObject<List<MovieDetail>>(modelData.ToString());
             foreach (MovieDetail m in movieObject)
             {
-                response = await client.GetAsync($"/3/movie/{m.id}?api_key={_APIKey}");
-                movieJson = await response.Content.ReadAsStringAsync();
-                json = JObject.Parse(movieJson);
-                JToken runtimeFromJson = json["runtime"];
-                m.runtime = JsonConvert.DeserializeObject<int>(runtimeFromJson.ToString());
+                var response2 = await client.GetAsync($"/3/movie/{m.id}?api_key={_APIKey}");
+                var movieJson2 = await response2.Content.ReadAsStringAsync();
+                JObject json2 = JObject.Parse(movieJson2);
+                JToken runtimeFromJson = json2["runtime"];
+                if (!int.TryParse(runtimeFromJson.ToString(), out int i))
+                {
+                    m.runtime = 0;
+                }
+                else
+                {
+                    m.runtime = JsonConvert.DeserializeObject<int>(runtimeFromJson.ToString());
+                }
+            }
+            foreach (MovieDetail m in movieObject)
+            {
+                if (m.release_date == null)
+                {
+                    m.release_date = "Release date not found";
+                }
             }
             return movieObject;
         }
 
-        //public async Task<List<MovieDetail>> GetFavoritesList()
-        //{
-        //}
+        public async Task<List<MovieDetail>> GetFavoriteMoviesList(List<Favorites> fl)
+        {
+            List<MovieDetail> ml = new List<MovieDetail>();
+            var client = GetClient();
+            foreach (Favorites f in fl)
+            {
+                var response = await client.GetAsync($"/3/movie/{f.ApiId}?api_key={_APIKey}");
+                var movieJson = await response.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(movieJson);
+                MovieDetail movie = JsonConvert.DeserializeObject<MovieDetail>(json.ToString());
+                ml.Add(movie);
+            }
+            return ml;
+        }
 
         //public async Task<MovieDetail> GetMovieDetailForFavorites(int movie_id)
         //{

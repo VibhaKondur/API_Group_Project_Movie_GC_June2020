@@ -18,9 +18,9 @@ namespace API_Group_Project_Movie_GC_June2020.Models
         public string original_title { get; set; }
         public float popularity { get; set; }
         public string poster_path { get; set; }
-        public DateTime release_date { get; set; }
+        public string release_date { get; set; }
         public int revenue { get; set; }
-        public int runtime { get; set; }
+        public int? runtime { get; set; }
         public string overview { get; set; }
         public string tagline { get; set; }
         public string status { get; set; }

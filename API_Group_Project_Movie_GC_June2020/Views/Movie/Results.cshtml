@@ -16,7 +16,8 @@
             <img src="@imgsrc" style="width:50%" /><br>
             <h4>@movie.title</h4>
             <h5>Runtime: @movie.runtime</h5>
-            <h5>Release Date: @movie.release_date.ToShortDateString()</h5>
+
+            <h5>Release Date: @movie.release_date</h5>
 
 
             <button onclick="document.location = '/Movie/AddToFavorite?id=@movie.id'"> Add to Favorites</button>
