@@ -24,6 +24,7 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             return View();
         }
 
+        
 
         //public IActionResult SearchResult(string searchTitle)
         //{

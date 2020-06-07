@@ -66,7 +66,7 @@ namespace API_Group_Project_Movie_GC_June2020
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Movie}/{action=SearchIndex}/{id?}");
+                    pattern: "{controller=MovieTest}/{action=SearchIndex}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
