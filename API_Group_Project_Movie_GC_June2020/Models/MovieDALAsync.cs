@@ -26,39 +26,22 @@ namespace API_Group_Project_Movie_GC_June2020.Models
             return client;
         }
 
-        public async Task<MovieDetail> GetMovieByTitle(string searchTitle, int i)
+        public async Task<List<MovieDetail>> GetMovieListByTitleSearch(string searchTitle)
         {
             var client = GetClient();
             var response = await client.GetAsync($"/3/search/movie?api_key={_APIKey}&query={searchTitle}");
             var movieJson = await response.Content.ReadAsStringAsync();
             JObject json = JObject.Parse(movieJson);
-            List<JToken> modelData = json["results"].ToList();
-            MovieDetail movieObject = JsonConvert.DeserializeObject<MovieDetail>(modelData[i].ToString());
-            response = await client.GetAsync($"/3/movie/{movieObject.id}?api_key={_APIKey}");
-            movieJson = await response.Content.ReadAsStringAsync();
-            json = JObject.Parse(movieJson);
-            JToken runtimeFromJson = json["runtime"];
-            movieObject.runtime = JsonConvert.DeserializeObject<int>(runtimeFromJson.ToString());
-            return movieObject;
-        }
-
-        public async Task<List<MovieDetail>> GetMovieListByTitleSearch(string searchTitle)
-        {
-            List<MovieDetail> ml = new List<MovieDetail>();
-            MovieDetail m;
-            for (int i = 0; i < 20; i++)
+            List<MovieDetail> movieObject = JsonConvert.DeserializeObject<List<MovieDetail>>(json["results"].ToString());
+            foreach (MovieDetail m in movieObject)
             {
-                try
-                {
-                    m = await GetMovieByTitle(searchTitle, i);
-                    ml.Add(m);
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    i = 20;
-                }
+                response = await client.GetAsync($"/3/movie/{m.id}?api_key={_APIKey}");
+                movieJson = await response.Content.ReadAsStringAsync();
+                json = JObject.Parse(movieJson);
+                JToken runtimeFromJson = json["runtime"];
+                m.runtime = JsonConvert.DeserializeObject<int>(runtimeFromJson.ToString());
             }
-            return ml;
+            return movieObject;
         }
 
         //public async Task<List<MovieDetail>> GetFavoritesList()
