@@ -4,33 +4,23 @@
 }
 @model List<MovieDetail>
 
-<h1>Movie Results </h1>
+<h1 style="text-align:center">Movie Results </h1>
+<br><br>
 
-<table style="width:100%">
-
-    <tr>
-        <th>Movie Title</th>
-        <th>Movie Run Time</th>
-        <th>Movie Release Date</th>
-        <th>Movie Poster</th>
-    </tr>
-
+<div class="flex">
     @foreach (var movie in Model)
     {
-        <tr>
-            <td>@movie.title</td>
-            <td>@movie.runtime</td>
-            <td>@movie.release_date.ToShortDateString()</td>
-            @{ 
-                string imgsrc = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
-            }
-            <td><img src="@imgsrc" style="width:50%" /></td>
-            <td>
-                <button onclick="document.location = '/Movie/AddToFavorite?title=@movie.title'"> Add to Favorites</button>
-            </td>
-            
-        </tr>
+        string imgsrc = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
+
+        <div class="flex-item">
+            <img src="@imgsrc" style="width:50%" /><br>
+            <h4>@movie.title</h4>
+            <h5>Runtime: @movie.runtime</h5>
+            <h5>Release Date: @movie.release_date.ToShortDateString()</h5>
+
+
+            <button onclick="document.location = '/Movie/AddToFavorite?title=@movie.title'"> Add to Favorites</button>
+            <br><br><br><br>
+        </div>  
      }
-
-
-</table>
+</div>
