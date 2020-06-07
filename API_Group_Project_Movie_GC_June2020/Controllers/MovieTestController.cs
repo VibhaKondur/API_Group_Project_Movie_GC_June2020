@@ -32,6 +32,7 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             return View();
         }
 
+
         //public IActionResult AddToFavorite(int apiId)
         //{
         //    return View(apiId);
@@ -65,6 +66,9 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             }
             return RedirectToAction("Favorites");
         }
+
+
+        
 
 
         //public IActionResult SearchResult(string searchTitle)
