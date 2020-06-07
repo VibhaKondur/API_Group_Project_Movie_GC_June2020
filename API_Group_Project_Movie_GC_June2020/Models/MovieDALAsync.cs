@@ -10,55 +10,52 @@ using System.Threading.Tasks;
 
 namespace API_Group_Project_Movie_GC_June2020.Models
 {
-    public class MovieDAL
+    public class MovieDALAsync
     {
         private readonly string _APIKey;
 
-        public MovieDAL(string APIKey)
+        public MovieDALAsync(string APIKey)
         {
             _APIKey = APIKey;
         }
 
-        public string GetBaseUrl()
+        public HttpClient GetClient()
         {
-            return "https://api.themoviedb.org/";
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri($"https://api.themoviedb.org/");
+            return client;
         }
 
-        public MovieDetail GetMovieByTitleSearchJSON(string searchTitle, int i)
+        public async Task<MovieDetail> GetMovieByTitle(string searchTitle, int i)
         {
-            string url = GetBaseUrl() + $"3/search/movie?api_key={_APIKey}&query={searchTitle}";
-            HttpWebRequest request = WebRequest.CreateHttp(url);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            StreamReader rd = new StreamReader(response.GetResponseStream());
-            string output = rd.ReadToEnd();
-            JObject json = JObject.Parse(output);
+            var client = GetClient();
+            var response = await client.GetAsync($"/3/search/movie?api_key={_APIKey}&query={searchTitle}");
+            var movieJson = await response.Content.ReadAsStringAsync();
+            JObject json = JObject.Parse(movieJson);
             List<JToken> modelData = json["results"].ToList();
             MovieDetail movieObject = JsonConvert.DeserializeObject<MovieDetail>(modelData[i].ToString());
-            url = GetBaseUrl() + $"3/movie/{movieObject.id}?api_key={_APIKey}";
-            request = WebRequest.CreateHttp(url);
-            response = (HttpWebResponse)request.GetResponse();
-            rd = new StreamReader(response.GetResponseStream());
-            output = rd.ReadToEnd();
-            json = JObject.Parse(output);
+            response = await client.GetAsync($"/3/movie/{movieObject.id}?api_key={_APIKey}");
+            movieJson = await response.Content.ReadAsStringAsync();
+            json = JObject.Parse(movieJson);
             JToken runtimeFromJson = json["runtime"];
             movieObject.runtime = JsonConvert.DeserializeObject<int>(runtimeFromJson.ToString());
             return movieObject;
         }
 
-        public List<MovieDetail> GetMovieListByTitleSearch(string searchTitle)
+        public async Task<List<MovieDetail>> GetMovieListByTitleSearch(string searchTitle)
         {
             List<MovieDetail> ml = new List<MovieDetail>();
             MovieDetail m;
-            for (int i = 0; i < 2000; i++)
+            for (int i = 0; i < 20; i++)
             {
                 try
                 {
-                    m = GetMovieByTitleSearchJSON(searchTitle, i);
+                    m = await GetMovieByTitle(searchTitle, i);
                     ml.Add(m);
                 }
-                catch(ArgumentOutOfRangeException e)
+                catch (ArgumentOutOfRangeException)
                 {
-                    i = 2000;
+                    i = 20;
                 }
             }
             return ml;
