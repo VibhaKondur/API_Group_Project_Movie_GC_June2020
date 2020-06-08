@@ -26,23 +26,20 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             _context = context;
         }
 
-
         public IActionResult SearchIndex()
         {
             return View();
         }
-
-
-        //public IActionResult AddToFavorite(int apiId)
-        //{
-        //    return View(apiId);
-        //}
 
         public IActionResult AddToFavorite(int id)
         {
             Favorites favorite = new Favorites();
             favorite.ApiId = id;
             favorite.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if(_context.Favorites.Where(x => (x.ApiId == id) && (x.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)).ToList().Count > 0)
+            {
+                return RedirectToAction("Favorites");
+            }
             if (ModelState.IsValid)
             {
                 _context.Favorites.Add(favorite);
@@ -60,9 +57,10 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             return View(ml);
         }
 
-        public IActionResult DeleteFromFavorites(int id)
+        public IActionResult RemoveFilm(int id)
         {
-            Favorites found = _context.Favorites.Find(id);
+            string uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Favorites found = _context.Favorites.FirstOrDefault(x => (x.ApiId == id) && (x.UserId == uid));
             if (found != null)
             {
                 _context.Favorites.Remove(found);
@@ -71,23 +69,11 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             return RedirectToAction("Favorites");
         }
 
-
-
-
-
-        //public IActionResult SearchResult(string searchTitle)
-        //{
-        //    List<Movie> ml = new List<Movie>();
-        //    ml = _movieDAL.GetMovieListByTitleSearch(searchTitle);
-        //    return RedirectToAction("Results", ml);
-        //}
-
         [HttpPost]
         public async Task<IActionResult> Results(string searchTitle)
         {
             List<MovieDetail> ml = await _movieDAL.GetMovieListByTitleSearch(searchTitle);
             return View(ml);
         }
-
     }
 }
