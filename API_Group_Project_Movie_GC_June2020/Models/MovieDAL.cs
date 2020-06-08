@@ -48,20 +48,27 @@ namespace API_Group_Project_Movie_GC_June2020.Models
                 var movieJson2 = await response2.Content.ReadAsStringAsync();
                 JObject json2 = JObject.Parse(movieJson2);
                 JToken runtimeFromJson = json2["runtime"];
-                if (!int.TryParse(runtimeFromJson.ToString(), out int i))
+                if (runtimeFromJson != null)
                 {
-                    m.runtime = 0;
+                    if (!int.TryParse(runtimeFromJson.ToString(), out int i))
+                    {
+                        m.runtime = 0;
+                    }
+                    else
+                    {
+                        m.runtime = JsonConvert.DeserializeObject<int>(runtimeFromJson.ToString());
+                    }
                 }
                 else
                 {
-                    m.runtime = JsonConvert.DeserializeObject<int>(runtimeFromJson.ToString());
+                    m.runtime = 0;
                 }
             }
             foreach (MovieDetail m in movieObject)
             {
-                if (m.release_date == null)
+                if (m.release_date == null || m.release_date == "")
                 {
-                    m.release_date = "Release date not found";
+                    m.release_date = "n/a";
                 }
             }
             return movieObject;
