@@ -17,26 +17,34 @@
     {
         string imgsrc = "https://image.tmdb.org/t/p/w500" + favoriteFilm.poster_path;
 
-        <div class="flex-item">
-            @*
-                Added validation for poster_path.
-            *@
-            @if (favoriteFilm.poster_path != null)
-            {
-                <img src="@imgsrc" style="width:50%" />
-            }
-            else
-            {
-                <p class="text-danger">no poster!</p>
-            }
-            <br>
-            <h4>@favoriteFilm.title</h4>
+    <div class="flex-item">
+        @*
+        Added validation for poster_path.
+        *@
+        @if (favoriteFilm.poster_path != null)
+        {
+            <img src="@imgsrc" style="width:50%" />
+        }
+        else
+        {
+            <p class="text-danger">no poster!</p>
+        }
+        <br>
+        <h4>@favoriteFilm.title</h4>
+        @if (favoriteFilm.runtime == 0)
+        {
+            <h5>Runtime: n/a</h5>
+        }
+        else
+        {
             <h5>Runtime: @favoriteFilm.runtime minutes</h5>
-            <h5>Release Date: @favoriteFilm.release_date</h5>
-            <h5>Overview: @favoriteFilm.overview</h5>
-            <h5>Tag Line: @favoriteFilm.tagline</h5>
-            <button onclick="document.location = '/Movie/RemoveFilm?id=@favoriteFilm.id'">Remove this movie</button>
-            <br><br><br><br>
-        </div>
+        }
+        
+        <h5>Release Date: @favoriteFilm.release_date</h5>
+        <h5>Overview: @favoriteFilm.overview</h5>
+        <h5>Tag Line: @favoriteFilm.tagline</h5>
+        <button onclick="document.location = '/Movie/RemoveFilm?id=@favoriteFilm.id'">Remove this movie</button>
+        <br><br><br><br>
+    </div>
     }
 </div>
