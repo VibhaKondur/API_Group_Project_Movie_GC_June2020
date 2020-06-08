@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace API_Group_Project_Movie_GC_June2020.Controllers
 {
-    [Authorize]
+
     public class MovieController : Controller
     {
         private readonly FilmsDbContext _context;
@@ -30,13 +30,15 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
         {
             return View();
         }
-
+        [Authorize]
         public IActionResult AddToFavorite(int id)
         {
-            Favorites favorite = new Favorites();
-            favorite.ApiId = id;
-            favorite.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            if(_context.Favorites.Where(x => (x.ApiId == id) && (x.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)).ToList().Count > 0)
+            Favorites favorite = new Favorites
+            {
+                ApiId = id,
+                UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value
+            };
+            if (_context.Favorites.Where(x => (x.ApiId == id) && (x.UserId == User.FindFirst(ClaimTypes.NameIdentifier).Value)).ToList().Count > 0)
             {
                 return RedirectToAction("Favorites");
             }
@@ -47,7 +49,7 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             }
             return RedirectToAction("Favorites");/*, new { id = favorite.Id});*/
         }
-
+        [Authorize]
         public async Task<IActionResult> Favorites()
         {
             List<MovieDetail> ml = new List<MovieDetail>();
@@ -56,7 +58,7 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             ml = await _movieDAL.GetFavoriteMoviesList(favoritesOfUser);
             return View(ml);
         }
-
+        [Authorize]
         public IActionResult RemoveFilm(int id)
         {
             string uid = User.FindFirstValue(ClaimTypes.NameIdentifier);
