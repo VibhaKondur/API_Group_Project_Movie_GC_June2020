@@ -15,6 +15,9 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
     {
         private readonly FilmsDbContext _context;
 
+        /*
+         * Hid API key correctly with .gitIgnore
+         */
         private readonly string _APIKey;
 
         private readonly MovieDAL _movieDAL;
@@ -26,10 +29,18 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             _context = context;
         }
 
+        /*
+         * Displays SearchIndex view to search with
+         */
         public IActionResult SearchIndex()
         {
             return View();
         }
+
+        /*
+         * Action to add a movie to your favorites
+         * Redirects to favorites view
+         */
         [Authorize]
         public IActionResult AddToFavorite(int id)
         {
@@ -47,8 +58,12 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
                 _context.Favorites.Add(favorite);
                 _context.SaveChanges();
             }
-            return RedirectToAction("Favorites");/*, new { id = favorite.Id});*/
+            return RedirectToAction("Favorites");
         }
+
+        /*
+         * Displays favorites view for user logged in
+         */
         [Authorize]
         public async Task<IActionResult> Favorites()
         {
@@ -58,6 +73,11 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             ml = await _movieDAL.GetFavoriteMoviesList(favoritesOfUser);
             return View(ml);
         }
+
+        /*
+         * Remove film from your favorites
+         * Redirects to favorites view
+         */
         [Authorize]
         public IActionResult RemoveFilm(int id)
         {
@@ -71,6 +91,9 @@ namespace API_Group_Project_Movie_GC_June2020.Controllers
             return RedirectToAction("Favorites");
         }
 
+        /*
+         * Displays search results view after you've searched in the SearchIndex view
+         */
         [HttpPost]
         public async Task<IActionResult> Results(string searchTitle)
         {

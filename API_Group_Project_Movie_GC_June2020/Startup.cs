@@ -28,6 +28,8 @@ namespace API_Group_Project_Movie_GC_June2020
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            // Added FilmsDb context
             services.AddDbContext<FilmsDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -65,7 +67,7 @@ namespace API_Group_Project_Movie_GC_June2020
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
+                    name: "default", // Make the default page the search page
                     pattern: "{controller=Movie}/{action=SearchIndex}/{id?}");
                 endpoints.MapRazorPages();
             });

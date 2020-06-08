@@ -13,6 +13,9 @@
         string imgsrc = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
 
     <div class="flex-item">
+        @*
+            Added validation for poster_path.
+        *@
         @if (movie.poster_path != null)
         {
             <img src="@imgsrc" style="width:50%" />

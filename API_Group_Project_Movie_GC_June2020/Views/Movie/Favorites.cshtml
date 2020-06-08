@@ -2,8 +2,12 @@
 @{
     ViewData["Title"] = "Favorites";
 }
-<p><a href="/Movie/SearchIndex">Search For Another Movie</a>.</p>
 
+
+<p><a href="/Movie/SearchIndex">Search For Another Movie</a>.</p>
+@*
+    Added CSS to enhance formatting of favorites view
+*@
 
 <h1 style="text-align:center">Movie Favorites </h1>
 <br>
@@ -14,7 +18,18 @@
         string imgsrc = "https://image.tmdb.org/t/p/w500" + favoriteFilm.poster_path;
 
         <div class="flex-item">
-            <img src="@imgsrc" style="width:50%" /><br>
+            @*
+                Added validation for poster_path.
+            *@
+            @if (favoriteFilm.poster_path != null)
+            {
+                <img src="@imgsrc" style="width:50%" />
+            }
+            else
+            {
+                <p class="text-danger">no poster!</p>
+            }
+            <br>
             <h4>@favoriteFilm.title</h4>
             <h5>Run Time: @favoriteFilm.runtime</h5>
             <h5>Release Date: @favoriteFilm.release_date</h5>
@@ -25,20 +40,3 @@
         </div>
     }
 </div>
-@*@using (Html.BeginForm("Delete", "Movie", FormMethod.Post))
-    {
-        <input type="submit" class="button" value="Delete" />
-    }*@
-
-
-
-
-@*Id (primary key) - int, not null, auto increment
-    Original_title(Name) - Nvarchar(50)
-    Genre - varchar (20)
-    Runtime - int
-    Release date - date
-    Poster (link to photo) -  varchar(40)
-    Summary / overview - nvarchar(400)
-    Tagline - nvarchar(100)
-    UserId(ASP.net users)- foreign key*@
